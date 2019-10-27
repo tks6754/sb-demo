@@ -1,10 +1,12 @@
 package com.miao.spring.demo.http;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class TableRet<T> {
 
     private int total;
