@@ -8,3 +8,7 @@ log/
 target/
 
 
+# mac
+.DS_Store
+
+
