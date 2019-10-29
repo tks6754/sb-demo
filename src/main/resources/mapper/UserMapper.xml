@@ -13,5 +13,11 @@
   </sql>
 
 
+  <select id="getById" resultType="user" parameterType="Integer">
+    SELECT <include refid="base_column_list"/>
+        FROM user
+        WHERE id=${id,jdbcType=INTEGER}
+  </select>
+
   
 </mapper>
