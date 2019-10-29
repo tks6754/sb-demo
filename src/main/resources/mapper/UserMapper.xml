@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miao.spring.demo.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.miao.spring.demo.domain.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="head_img" jdbcType="VARCHAR" property="headImg" />
+  </resultMap>
+  
+  <sql id="base_column_list">
+    id, nickname, age, head_img
+  </sql>
+
+
+  
+</mapper>

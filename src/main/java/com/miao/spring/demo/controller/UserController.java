@@ -1,7 +1,7 @@
 package com.miao.spring.demo.controller;
 
 
-import com.miao.spring.demo.domain.User;
+import com.miao.spring.demo.domain.UserDTO;
 import com.miao.spring.demo.http.GlobalResponse;
 import com.miao.spring.demo.http.TableRet;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +17,8 @@ public class UserController {
 
 
     @GetMapping("/one")
-    public GlobalResponse<User> getUser(){
-        User user = new User(1, "miao", 27);
+    public GlobalResponse<UserDTO> getUser(){
+        UserDTO userDTO = new UserDTO(1, "miao", 27);
 
         //return GlobalResponse.success(user);
 
@@ -26,12 +26,12 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public GlobalResponse<TableRet<User>> listUser(){
-        List<User> userList = new ArrayList<>();
-        userList.add(new User(1, "miao", 27));
-        userList.add(new User(2, "kun", 28));
+    public GlobalResponse<TableRet<UserDTO>> listUser(){
+        List<UserDTO> userDTOList = new ArrayList<>();
+        userDTOList.add(new UserDTO(1, "miao", 27));
+        userDTOList.add(new UserDTO(2, "kun", 28));
 
-        TableRet<User> tableRet = new TableRet<>(2, 0, 1, true, 2, 1, 1, userList);
+        TableRet<UserDTO> tableRet = new TableRet<>(2, 0, 1, true, 2, 1, 1, userDTOList);
         return GlobalResponse.success(tableRet);
     }
 

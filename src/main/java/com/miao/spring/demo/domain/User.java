@@ -1,15 +1,23 @@
 package com.miao.spring.demo.domain;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-@Data
-@AllArgsConstructor
 public class User {
-    private int id;
+    /**
+     * id
+     */
+    private Integer id;
 
-    private String name;
+    /**
+     * 姓名
+     */
+    private String nickname;
 
+    /**
+     * 年龄
+     */
     private Integer age;
+
+    /**
+     * 头像
+     */
+    private String headImg;
 }
