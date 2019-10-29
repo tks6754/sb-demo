@@ -13,10 +13,19 @@
   </sql>
 
 
-  <select id="getById" resultType="user" parameterType="Integer">
+  <select id="getById" resultType="com.miao.spring.demo.domain.User" parameterType="Integer">
     SELECT <include refid="base_column_list"/>
         FROM user
         WHERE id=${id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listUser" resultType="com.miao.spring.demo.domain.User" parameterType="int">
+
+  </select>
+
+
+  <select id="count" resultType="int" >
+
   </select>
 
   
