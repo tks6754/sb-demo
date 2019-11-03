@@ -2,8 +2,6 @@ server:
   port: 8000
 
 spring:
-  jackson:
-    default-property-inclusion: non_null
   datasource:
     druid:
       url: jdbc:mysql://localhost:3306/springbootdb?useUnicode=true&characterEncoding=utf8
@@ -16,7 +14,7 @@ spring:
       max-wait: 10
       pool-prepared-statements: false
       max-pool-prepared-statement-per-connection-size: 1
-      max-open-prepared-statements: false
+      max-open-prepared-statements: 1
       validation-query: SELECT 1
       validation-query-timeout: 10
       test-on-borrow: false

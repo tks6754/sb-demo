@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.miao.spring.demo.controller")
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
