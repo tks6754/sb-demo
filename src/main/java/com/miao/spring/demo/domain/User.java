@@ -1,13 +1,16 @@
 package com.miao.spring.demo.domain;
 
+import lombok.Data;
+
+@Data
 public class User {
     /**
      * id
      */
-    private Integer id;
+    private Long id;
 
     /**
-     * 姓名
+     * 昵称
      */
     private String nickname;
 
