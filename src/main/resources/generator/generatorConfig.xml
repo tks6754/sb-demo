@@ -66,12 +66,17 @@
 
 
         <!--生成对应表及类名-->
-        <table tableName="user" domainObjectName="User"
+        <!--<table tableName="user" domainObjectName="User"
+               enableInsert="false"
+               enableSelectByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableDeleteByPrimaryKey="false" />-->
+
+        <table tableName="job_task" domainObjectName="JobTask"
                enableInsert="false"
                enableSelectByPrimaryKey="false"
                enableUpdateByPrimaryKey="false"
                enableDeleteByPrimaryKey="false" />
-
 
     </context>
 </generatorConfiguration>

@@ -14,13 +14,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PrintJob extends QuartzJobBean {
 
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    Scheduler scheduler;
-
-
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         System.out.println("print -- print -- print --");
