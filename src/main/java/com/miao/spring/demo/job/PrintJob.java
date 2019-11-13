@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+@DisallowConcurrentExecution
+@PersistJobDataAfterExecution
 public class PrintJob extends QuartzJobBean {
 
     @Autowired
