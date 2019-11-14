@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miao.spring.demo.dao.JobTaskMapper">
+  <resultMap id="BaseResultMap" type="com.miao.spring.demo.domain.JobTask">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
+    <result column="job_class" jdbcType="VARCHAR" property="jobClass" />
+    <result column="job_status" jdbcType="TINYINT" property="jobStatus" />
+    <result column="job_group" jdbcType="VARCHAR" property="jobGroup" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  
+  <sql id="base_column_list">
+    id, job_name, description, cron_expression, job_class, job_status, job_group, create_time, update_time
+  </sql>
+
+  <insert id="saveJobTask">
+
+  </insert>
+
+  <update id="deleteJobTask">
+
+  </update>
+
+  <update id="updateJobTask">
+
+  </update>
+
+  <select id="listJobTask" resultType="com.miao.spring.demo.domain.JobTask">
+
+  </select>
+
+</mapper>
