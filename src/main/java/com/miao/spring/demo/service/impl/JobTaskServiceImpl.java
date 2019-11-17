@@ -5,6 +5,9 @@ import com.miao.spring.demo.domain.JobTask;
 import com.miao.spring.demo.domain.dto.JobTaskDTO;
 import com.miao.spring.demo.domain.qto.JobTaskQTO;
 import com.miao.spring.demo.service.JobTaskService;
+import com.miao.spring.demo.util.QuartzUtils;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ public class JobTaskServiceImpl implements JobTaskService {
     @Autowired
     JobTaskMapper jobTaskMapper;
 
+    @Autowired
+    Scheduler scheduler;
 
     @Override
     public Long addJobTask(JobTaskDTO jobTaskDTO) {
@@ -29,18 +34,22 @@ public class JobTaskServiceImpl implements JobTaskService {
     }
 
     @Override
-    public boolean updateJobTask(JobTaskDTO jobTaskDTO) {
-        JobTask jobTask = new JobTask();
-        BeanUtils.copyProperties(jobTaskDTO, jobTask);
-
-        Integer num = jobTaskMapper.updateJobTask(jobTask);
+    public boolean deleteJobTask(Long id) {
+        JobTask jobTask = jobTaskMapper.getById(id);
+        Integer num = jobTaskMapper.deleteJobTask(id);
+        QuartzUtils.deleteScheduleJob(scheduler, jobTask.getJobName(), jobTask.getJobGroup());
 
         return num>0?true:false;
     }
 
     @Override
-    public boolean deleteJobTask(Long id) {
-        Integer num = jobTaskMapper.deleteJobTask(id);
+    public boolean updateJobTask(JobTaskDTO jobTaskDTO) {
+        JobTask jobTask = new JobTask();
+        BeanUtils.copyProperties(jobTaskDTO, jobTask);
+        Integer num = jobTaskMapper.updateJobTask(jobTask);
+
+        JobTask job = jobTaskMapper.getById(jobTaskDTO.getId());
+        QuartzUtils.updateScheduleJob(scheduler, job.getJobName(), job.getJobGroup(), job.getCronExpression());
 
         return num>0?true:false;
     }
@@ -55,20 +64,28 @@ public class JobTaskServiceImpl implements JobTaskService {
     }
 
     @Override
-    public boolean runTask(Long id) {
+    public boolean runTask(Long id) throws ClassNotFoundException, SchedulerException {
+        JobTask jobTask = jobTaskMapper.getById(id);
+        QuartzUtils.runTask(scheduler,jobTask.getJobClass(), jobTask.getJobName(), jobTask.getJobGroup(), jobTask.getCronExpression());
 
-
-        // 更新状态
-        return false;
+        jobTask.setJobStatus(1);
+        jobTaskMapper.updateJobTask(jobTask);
+        return true;
     }
 
     @Override
     public boolean stopTask(Long id) {
-        return false;
+        JobTask jobTask = jobTaskMapper.getById(id);
+        QuartzUtils.pauseScheduleJob(scheduler, jobTask.getJobName(), jobTask.getJobGroup());
+        jobTask.setJobStatus(2);
+        jobTaskMapper.updateJobTask(jobTask);
+        return true;
     }
 
     @Override
     public boolean runTaskOnce(Long id) {
-        return false;
+        JobTask jobTask = jobTaskMapper.getById(id);
+        QuartzUtils.runOnce(scheduler, jobTask.getJobName(), jobTask.getJobGroup());
+        return true;
     }
 }

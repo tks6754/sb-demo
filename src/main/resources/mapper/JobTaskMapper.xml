@@ -29,7 +29,11 @@
 
   </update>
 
-  <select id="listJobTask" resultType="com.miao.spring.demo.domain.JobTask">
+  <select id="listJobTask" resultMap="BaseResultMap">
+
+  </select>
+
+  <select id="getById" resultMap="BaseResultMap">
 
   </select>
 

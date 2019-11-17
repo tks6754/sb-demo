@@ -2,6 +2,7 @@ package com.miao.spring.demo.service;
 
 import com.miao.spring.demo.domain.dto.JobTaskDTO;
 import com.miao.spring.demo.domain.qto.JobTaskQTO;
+import org.quartz.SchedulerException;
 
 import java.util.List;
 
@@ -15,18 +16,18 @@ public interface JobTaskService {
     Long addJobTask(JobTaskDTO jobTaskDTO);
 
     /**
-     * 更新任务
-     * @param jobTaskDTO
-     * @return
-     */
-    boolean updateJobTask(JobTaskDTO jobTaskDTO);
-
-    /**
      * 删除任务
      * @param id id
      * @return
      */
     boolean deleteJobTask(Long id);
+
+    /**
+     * 更新任务
+     * @param jobTaskDTO
+     * @return
+     */
+    boolean updateJobTask(JobTaskDTO jobTaskDTO);
 
     /**
      * 查询任务
@@ -35,12 +36,13 @@ public interface JobTaskService {
      */
     List<JobTaskDTO> queryJobTask(JobTaskQTO jobTaskQTO);
 
+
     /**
      * 运行任务
      * @param id
      * @return
      */
-    boolean runTask(Long id);
+    boolean runTask(Long id) throws ClassNotFoundException, SchedulerException;
 
     /**
      * 停止任务
@@ -55,8 +57,6 @@ public interface JobTaskService {
      * @return
      */
     boolean runTaskOnce(Long id);
-
-
 
 
 

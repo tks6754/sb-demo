@@ -35,6 +35,11 @@ public interface JobTaskMapper {
      */
     List<JobTask> listJobTask(JobTaskQTO jobTaskQTO);
 
-
+    /**
+     * 获取任务详情
+     * @param id
+     * @return
+     */
+    JobTask getById(Long id);
 
 }

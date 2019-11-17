@@ -44,10 +44,11 @@ public class QuartzUtils {
     /**
      * 暂停定时任务
      * @param scheduler
-     * @param jobTask
+     * @param jobName
+     * @param groupName
      */
-    public static void pauseScheduleJob(Scheduler scheduler, JobTask jobTask){
-        JobKey jobKey = JobKey.jobKey(jobTask.getJobName(), jobTask.getJobGroup());
+    public static void pauseScheduleJob(Scheduler scheduler, String jobName, String jobGroup){
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
             scheduler.pauseJob(jobKey);
         } catch (SchedulerException e) {
@@ -74,10 +75,11 @@ public class QuartzUtils {
      * 根据任务名称立即运行一次定时任务
      * @param scheduler     调度器
      * @param jobName       定时任务名称
+     * @param jobGroup       定时任务组名
      * @throws SchedulerException
      */
-    public static void runOnce(Scheduler scheduler, String jobName){
-        JobKey jobKey = JobKey.jobKey(jobName);
+    public static void runOnce(Scheduler scheduler, String jobName, String jobGroup){
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
             scheduler.triggerJob(jobKey);
         } catch (SchedulerException e) {
@@ -88,15 +90,17 @@ public class QuartzUtils {
     /**
      * 更新定时任务
      * @param scheduler   调度器
-     * @param jobTask  定时任务信息类
+     * @param jobName   定时任务名称
+     * @param jobGroup   定时任务组名
+     * @param cronExpression
      * @throws SchedulerException
      */
-    public static void updateScheduleJob(Scheduler scheduler, JobTask jobTask)  {
+    public static void updateScheduleJob(Scheduler scheduler, String jobName, String jobGroup, String cronExpression)  {
         try {
             //获取到对应任务的触发器
-            TriggerKey triggerKey = TriggerKey.triggerKey(jobTask.getJobName());
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
             //设置定时任务执行方式
-            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(jobTask.getCronExpression());
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
             //重新构建任务的触发器trigger
             CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
@@ -111,10 +115,11 @@ public class QuartzUtils {
      * 根据定时任务名称从调度器当中删除定时任务
      * @param scheduler 调度器
      * @param jobName   定时任务名称
+     * @param jobGroup   定时任务组名
      * @throws SchedulerException
      */
-    public static void deleteScheduleJob(Scheduler scheduler, String jobName) {
-        JobKey jobKey = JobKey.jobKey(jobName);
+    public static void deleteScheduleJob(Scheduler scheduler, String jobName, String jobGroup) {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
             scheduler.deleteJob(jobKey);
         } catch (SchedulerException e) {
