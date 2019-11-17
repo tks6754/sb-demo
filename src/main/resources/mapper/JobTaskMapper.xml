@@ -18,7 +18,6 @@
   </sql>
 
   <insert id="saveJobTask">
-
   </insert>
 
   <update id="deleteJobTask">

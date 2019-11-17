@@ -40,7 +40,6 @@ public class QuartzUtils {
     }
 
 
-
     /**
      * 暂停定时任务
      * @param scheduler
@@ -60,10 +59,11 @@ public class QuartzUtils {
      * 根据任务名称恢复定时任务
      * @param scheduler  调度器
      * @param jobName    定时任务名称
+     * @param jobGroup    定时任务组名
      * @throws SchedulerException
      */
-    public static void resumeScheduleJob(Scheduler scheduler, String jobName) {
-        JobKey jobKey = JobKey.jobKey(jobName);
+    public static void resumeScheduleJob(Scheduler scheduler, String jobName, String jobGroup) {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
             scheduler.resumeJob(jobKey);
         } catch (SchedulerException e) {
