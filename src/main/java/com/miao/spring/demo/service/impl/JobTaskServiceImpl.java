@@ -29,6 +29,7 @@ public class JobTaskServiceImpl implements JobTaskService {
     public Long addJobTask(JobTaskDTO jobTaskDTO) {
         JobTask jobTask = new JobTask();
         BeanUtils.copyProperties(jobTaskDTO, jobTask);
+        jobTask.setJobStatus(0);
 
         return jobTaskMapper.saveJobTask(jobTask);
     }
@@ -58,7 +59,13 @@ public class JobTaskServiceImpl implements JobTaskService {
     public List<JobTaskDTO> queryJobTask(JobTaskQTO jobTaskQTO) {
         List<JobTaskDTO> jobTaskDTOList = new ArrayList<>();
         List<JobTask> jobTasks = jobTaskMapper.listJobTask(jobTaskQTO);
-        BeanUtils.copyProperties(jobTasks, jobTaskDTOList);
+        if (jobTasks!=null && jobTasks.size()>0){
+            for (JobTask jobTask : jobTasks) {
+                JobTaskDTO jobTaskDTO = new JobTaskDTO();
+                BeanUtils.copyProperties(jobTask, jobTaskDTO);
+                jobTaskDTOList.add(jobTaskDTO);
+            }
+        }
 
         return jobTaskDTOList;
     }

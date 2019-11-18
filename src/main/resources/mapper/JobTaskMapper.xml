@@ -17,23 +17,108 @@
     id, job_name, description, cron_expression, job_class, job_status, job_group, create_time, update_time
   </sql>
 
-  <insert id="saveJobTask">
+  <insert id="saveJobTask" parameterType="com.miao.spring.demo.domain.JobTask">
+    INSERT INTO job_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jobName!=null and jobName!=''">
+        job_name,
+      </if>
+      <if test="description!=null and description!=''">
+        description,
+      </if>
+      <if test="cronExpression!=null and cronExpression!=''">
+        cron_expression,
+      </if>
+      <if test="jobClass!=null and jobClass!=''">
+        job_class,
+      </if>
+      <if test="jobStatus!=null and jobStatus!=''">
+        job_status,
+      </if>
+      <if test="jobGroup!=null and jobName!=''">
+        job_group,
+      </if>
+      create_time
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobName!=null and jobName!=''">
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="description!=null and description!=''">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression!=null and cronExpression!=''">
+        #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="jobClass!=null and jobClass!=''">
+        #{jobClass,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus!=null and jobStatus!=''">
+        #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="jobGroup!=null and jobName!=''">
+        #{jobGroup,jdbcType=VARCHAR},
+      </if>
+        now()
+    </trim>
   </insert>
 
   <update id="deleteJobTask">
-
+    UPDATE job_task
+    SET job_status=-1
+    WHERE id=#{id,jdbcType=BIGINT}
   </update>
 
   <update id="updateJobTask">
-
+    UPDATE job_task
+    <set>
+      <if test="jobName!=null and jobName!=''">
+        job_name = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="description!=null and description!=''">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression!=null and cronExpression!=''">
+        cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="jobClass!=null and jobClass!=''">
+        job_class = #{jobClass,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus!=null and jobStatus!=''">
+        job_status = #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="jobGroup!=null and jobName!=''">
+        job_group = #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      update_time=now()
+    </set>
+    WHERE id = #{id,jdbcType=BIGINT}
   </update>
 
   <select id="listJobTask" resultMap="BaseResultMap">
-
+    SELECT <include refid="base_column_list" />
+    FROM job_task
+    <where>
+      <if test="jobName!=null and jobName!=''">
+        job_name LIKE '%#{jobName,jdbcType=VARCHAR}%',
+      </if>
+      <if test="jobClass!=null and jobClass!=''">
+        job_class LIKE '%#{jobClass,jdbcType=VARCHAR}%',
+      </if>
+      <if test="jobStatus!=null and jobStatus!=''">
+        jobStatus = #{jobStatus,jdbcType=INTEGER},
+      </if>
+      <if test="jobGroup!=null and jobName!=''">
+        job_group LIKE '%#{jobGroup,jdbcType=VARCHAR}%',
+      </if>
+    </where>
   </select>
 
   <select id="getById" resultMap="BaseResultMap">
-
+    SELECT <include refid="base_column_list"/>
+    FROM job_task
+    WHERE id = #{id,jdbcType=BIGINT}
   </select>
 
 </mapper>

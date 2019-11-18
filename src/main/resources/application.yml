@@ -9,9 +9,9 @@ spring:
       password: root123
       driver-class-name: com.mysql.jdbc.Driver
       initial-size: 1
-      max-active: 1
+      max-active: 5
       min-idle: 1
-      max-wait: 10
+      max-wait: 100
       pool-prepared-statements: false
       max-pool-prepared-statement-per-connection-size: 1
       max-open-prepared-statements: 1
@@ -46,9 +46,7 @@ spring:
             threadPriority: 5 #线程优先级
             threadsInheritContextClassLoaderOfInitializingThread: true #配置是否启动自动加载数据库内的定时任务，默认true
 
-
-
 mybatis:
-  mapper-locations: classpath:mapper/*/*.xml
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.miao.spring.demo.domain, com.miao.spring.demo.domain.dto
 

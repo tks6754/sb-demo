@@ -9,24 +9,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QuartzConfig {
 
-    @Bean
-    public JobDetail printJobDetail(){
-        return JobBuilder.newJob(PrintJob.class)
-                .withIdentity("print-job", "print-group")
-                .storeDurably()
-                .build();
-    }
+//    @Bean
+//    public JobDetail printJobDetail(){
+//        return JobBuilder.newJob(PrintJob.class)
+//                .withIdentity("print-job", "print-group")
+//                .storeDurably()
+//                .build();
+//    }
 
-    @Bean
-    public Trigger printJobTrigger(){
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("*/5 * * * * ?");
-
-        return TriggerBuilder.newTrigger()
-                .forJob(printJobDetail())
-                .withIdentity("print-trigger")
-                .withSchedule(scheduleBuilder)
-                .build();
-    }
+//    @Bean
+//    public Trigger printJobTrigger(){
+//        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("*/5 * * * * ?");
+//
+//        return TriggerBuilder.newTrigger()
+//                .forJob(printJobDetail())
+//                .withIdentity("print-trigger")
+//                .withSchedule(scheduleBuilder)
+//                .build();
+//    }
 
 
 
