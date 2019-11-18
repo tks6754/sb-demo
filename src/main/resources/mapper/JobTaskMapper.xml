@@ -17,7 +17,7 @@
     id, job_name, description, cron_expression, job_class, job_status, job_group, create_time, update_time
   </sql>
 
-  <insert id="saveJobTask" parameterType="com.miao.spring.demo.domain.JobTask">
+  <insert id="saveJobTask" parameterType="JobTask">
     INSERT INTO job_task
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="jobName!=null and jobName!=''">

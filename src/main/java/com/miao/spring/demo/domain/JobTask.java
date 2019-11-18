@@ -1,9 +1,11 @@
 package com.miao.spring.demo.domain;
 
 import lombok.Data;
+import org.apache.ibatis.type.Alias;
 
 import java.util.Date;
 
+@Alias("JobTask")
 @Data
 public class JobTask {
     /**

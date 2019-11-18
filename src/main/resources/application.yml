@@ -48,5 +48,5 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.miao.spring.demo.domain, com.miao.spring.demo.domain.dto
+  type-aliases-package: com.miao.spring.demo.domain
 
