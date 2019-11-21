@@ -13,14 +13,14 @@ public class QuartzUtils {
      * @param scheduler
      * @param jobClassPath
      * @param jobName
-     * @param groupName
+     * @param jobGroup
      * @param cronExpression
      * @throws SchedulerException
      * @throws ClassNotFoundException
      */
-    public static void runTask(Scheduler scheduler, String jobClassPath, String jobName, String groupName, String cronExpression) throws SchedulerException, ClassNotFoundException {
-        JobKey jobKey = new JobKey(jobName, groupName);
-        TriggerKey triggerKey = new TriggerKey(jobName, groupName);
+    public static void runTask(Scheduler scheduler, String jobClassPath, String jobName, String jobGroup, String cronExpression) throws SchedulerException, ClassNotFoundException {
+        JobKey jobKey = new JobKey(jobName, jobGroup);
+        TriggerKey triggerKey = new TriggerKey(jobName, jobGroup);
 
         if (scheduler.getJobDetail(jobKey)==null){
             //获取到定时任务的执行类  必须是类的绝对路径名称
@@ -44,7 +44,7 @@ public class QuartzUtils {
      * 暂停定时任务
      * @param scheduler
      * @param jobName
-     * @param groupName
+     * @param jobGroup
      */
     public static void pauseScheduleJob(Scheduler scheduler, String jobName, String jobGroup){
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
