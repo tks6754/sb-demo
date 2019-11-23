@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -17,13 +18,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 @Slf4j
+@ResponseBody
 @RestControllerAdvice(basePackages = "com.miao.spring.demo.controller")
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     /**
-     * 定义要捕获的异常 可以多个 @ExceptionHandler({})
+     * 自定义异常 捕获
      *
      * @param request  request
      * @param e        exception
@@ -38,10 +41,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return GlobalResponse.failed(exception.getErrCode(), exception.getErrorMsg());
     }
 
+
+    //MethodArgumentNotValidException
+      //      MethodArgumentTypeMismatchException
+    // ConstraintViolationException
+
+    /**
+     * 参数校验异常 捕获
+     * @param request
+     * @param response
+     * @param e
+     * @return
+     */
+    @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class})
+    public GlobalResponse validationExceptionHandler(HttpServletRequest request, HttpServletResponse response, final Exception e){
+
+
+
+
+
+        return null;
+    }
+
+
+
     /**
      * 捕获  RuntimeException 异常
-     * TODO  如果你觉得在一个 exceptionHandler 通过  if (e instanceof xxxException) 太麻烦
-     * TODO  那么你还可以自己写多个不同的 exceptionHandler 处理不同异常
      *
      * @param request  request
      * @param e        exception
@@ -52,36 +77,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public GlobalResponse runtimeExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         RuntimeException exception = (RuntimeException) e;
-        log.error("内部服务错误, ex {}", exception.getStackTrace());
+        log.error("服务内部运行错误", exception);
         return GlobalResponse.failed("500", exception.getMessage());
     }
 
-    /**
-     * 通用的接口映射异常处理方
-     */
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-                                                             HttpStatus status, WebRequest request) {
-        if (ex instanceof MethodArgumentNotValidException) {
-            MethodArgumentNotValidException exception = (MethodArgumentNotValidException) ex;
-            return new ResponseEntity<>(new ErrorResponseEntity(status.value(), exception.getBindingResult().getAllErrors().get(0).getDefaultMessage()), status);
-        }
-        if (ex instanceof MethodArgumentTypeMismatchException) {
-            MethodArgumentTypeMismatchException exception = (MethodArgumentTypeMismatchException) ex;
-            log.error("参数转换失败，方法：" + exception.getParameter().getMethod().getName() + "，参数：" + exception.getName()
-                    + ",信息：" + exception.getLocalizedMessage());
-            return new ResponseEntity<>(new ErrorResponseEntity(status.value(), "参数转换失败"), status);
-        }
-        return new ResponseEntity<>(new ErrorResponseEntity(status.value(), "参数转换失败"), status);
-    }
-
-    /**
-     * 异常返回对象
-     */
-    @Data
-    @AllArgsConstructor
-    private class ErrorResponseEntity {
-        private int code;
-        private String message;
-    }
 }
