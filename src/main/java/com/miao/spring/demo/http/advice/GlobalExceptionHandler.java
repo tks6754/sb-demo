@@ -1,5 +1,6 @@
 package com.miao.spring.demo.http.advice;
 
+import com.miao.spring.demo.common.exception.BaseException;
 import com.miao.spring.demo.http.GlobalResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestControllerAdvice(basePackages = "com.miao.spring.demo.controller")
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-
     /**
      * 定义要捕获的异常 可以多个 @ExceptionHandler({})
      *
@@ -30,12 +30,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @param response response
      * @return 响应结果
      */
-    /*@ExceptionHandler(CustomException.class)
-    public GlobalResponse customExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        CustomException exception = (CustomException) e;
-        return GlobalResponse.faild(exception.getCode(), exception.getMessage());
-    }*/
+    @ExceptionHandler(BaseException.class)
+    public GlobalResponse baseExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        BaseException exception = (BaseException) e;
+        log.error("服务异常, 错误码:[{}], 错误信息:[{}]", exception.getErrCode(), exception.getErrCode(), e);
+        return GlobalResponse.failed(exception.getErrCode(), exception.getErrorMsg());
+    }
 
     /**
      * 捕获  RuntimeException 异常

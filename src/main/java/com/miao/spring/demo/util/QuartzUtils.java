@@ -1,6 +1,8 @@
 package com.miao.spring.demo.util;
 
-import com.miao.spring.demo.domain.JobTask;
+
+import com.miao.spring.demo.common.ErrorEnum;
+import com.miao.spring.demo.common.exception.QuartzException;
 import org.quartz.*;
 
 public class QuartzUtils {
@@ -13,28 +15,32 @@ public class QuartzUtils {
      * @param scheduler
      * @param jobClassPath
      * @param jobName
-     * @param groupName
+     * @param jobGroup
      * @param cronExpression
      * @throws SchedulerException
      * @throws ClassNotFoundException
      */
-    public static void runTask(Scheduler scheduler, String jobClassPath, String jobName, String groupName, String cronExpression) throws SchedulerException, ClassNotFoundException {
-        JobKey jobKey = new JobKey(jobName, groupName);
-        TriggerKey triggerKey = new TriggerKey(jobName, groupName);
+    public static void runTask(Scheduler scheduler, String jobClassPath, String jobName, String jobGroup, String cronExpression) {
+        try {
+            JobKey jobKey = new JobKey(jobName, jobGroup);
+            TriggerKey triggerKey = new TriggerKey(jobName, jobGroup);
 
-        if (scheduler.getJobDetail(jobKey)==null){
-            //获取到定时任务的执行类  必须是类的绝对路径名称
-            //定时任务类需要是job类的具体实现 QuartzJobBean是job的抽象类。
-            Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(jobClassPath);
-            // 构建定时任务信息
-            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobKey).build();
-            // 设置定时任务执行方式
-            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-            // 构建触发器trigger
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-            scheduler.scheduleJob(jobDetail, trigger);
-        }else {
-            scheduler.resumeJob(jobKey);
+            if (scheduler.getJobDetail(jobKey)==null){
+                //获取到定时任务的执行类  必须是类的绝对路径名称
+                //定时任务类需要是job类的具体实现 QuartzJobBean是job的抽象类。
+                Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(jobClassPath);
+                // 构建定时任务信息
+                JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobKey).build();
+                // 设置定时任务执行方式
+                CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+                // 构建触发器trigger
+                CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+                scheduler.scheduleJob(jobDetail, trigger);
+            }else {
+                scheduler.resumeJob(jobKey);
+            }
+        }catch (Exception e){
+            throw new QuartzException.JobRunException(ErrorEnum.JOB_RUN_ERR.errCode(), ErrorEnum.JOB_RUN_ERR.errorMsg(), e);
         }
 
     }
@@ -44,30 +50,14 @@ public class QuartzUtils {
      * 暂停定时任务
      * @param scheduler
      * @param jobName
-     * @param groupName
+     * @param jobGroup
      */
     public static void pauseScheduleJob(Scheduler scheduler, String jobName, String jobGroup){
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
             scheduler.pauseJob(jobKey);
         } catch (SchedulerException e) {
-            System.out.println("暂停定时任务出错："+e.getMessage());
-        }
-    }
-
-    /**
-     * 根据任务名称恢复定时任务
-     * @param scheduler  调度器
-     * @param jobName    定时任务名称
-     * @param jobGroup    定时任务组名
-     * @throws SchedulerException
-     */
-    public static void resumeScheduleJob(Scheduler scheduler, String jobName, String jobGroup) {
-        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
-        try {
-            scheduler.resumeJob(jobKey);
-        } catch (SchedulerException e) {
-            System.out.println("启动定时任务出错："+e.getMessage());
+            throw new QuartzException.JobPauseException(ErrorEnum.JOB_PAUSE_ERR.errCode(), ErrorEnum.JOB_PAUSE_ERR.errorMsg(), e);
         }
     }
 
@@ -83,7 +73,7 @@ public class QuartzUtils {
         try {
             scheduler.triggerJob(jobKey);
         } catch (SchedulerException e) {
-            System.out.println("运行定时任务出错："+e.getMessage());
+            throw new QuartzException.JobRunOnceException(ErrorEnum.JOB_RUN_ONCE_ERR.errCode(), ErrorEnum.JOB_RUN_ONCE_ERR.errorMsg(), e);
         }
     }
 
@@ -107,7 +97,7 @@ public class QuartzUtils {
             //重置对应的job
             scheduler.rescheduleJob(triggerKey, trigger);
         } catch (SchedulerException e) {
-            System.out.println("更新定时任务出错："+e.getMessage());
+            throw new QuartzException.JobUpdateException(ErrorEnum.JOB_UPDATE_ERR.errCode(), ErrorEnum.JOB_UPDATE_ERR.errorMsg(), e);
         }
     }
 
@@ -123,7 +113,7 @@ public class QuartzUtils {
         try {
             scheduler.deleteJob(jobKey);
         } catch (SchedulerException e) {
-            System.out.println("删除定时任务出错："+e.getMessage());
+            throw new QuartzException.JobDeleteException(ErrorEnum.JOB_DELETE_ERR.errCode(), ErrorEnum.JOB_DELETE_ERR.errorMsg(), e);
         }
     }
 
