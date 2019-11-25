@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
 
         }else {
             MethodArgumentTypeMismatchException exp = (MethodArgumentTypeMismatchException) e;
-            errMsgMap.put(exp.getName() + " 参数类型错误", "正确类型" + exp.getRequiredType().getSimpleName());
+            errMsgMap.put(exp.getName() + " 参数类型错误", "正确类型: " + exp.getRequiredType().getSimpleName());
         }
 
         return GlobalResponse.fail(ErrorEnum.REQUEST_PARAM_ERR, errMsgMap);
