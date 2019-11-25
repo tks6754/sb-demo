@@ -3,25 +3,19 @@ package com.miao.spring.demo.http.advice;
 import com.miao.spring.demo.common.ErrorEnum;
 import com.miao.spring.demo.common.exception.BaseException;
 import com.miao.spring.demo.http.GlobalResponse;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,21 +51,21 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, ConstraintViolationException.class})
     public GlobalResponse validationExceptionHandler(HttpServletRequest request, HttpServletResponse response, final Exception e){
-        Map<String, String> errMsgMap = new HashMap<>();
+        Map<Object, String> errMsgMap = new HashMap<>();
 
-        if (e.getClass().isInstance(MethodArgumentNotValidException.class)){
+        if (e instanceof MethodArgumentNotValidException){
             MethodArgumentNotValidException exp = (MethodArgumentNotValidException) e;
             errMsgMap = exp.getBindingResult().getFieldErrors().stream()
                     .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
 
-        }else if (e.getClass().isInstance(MethodArgumentTypeMismatchException.class)){
-            MethodArgumentTypeMismatchException exp = (MethodArgumentTypeMismatchException) e;
-
+        }else if (e instanceof ConstraintViolationException){
+            ConstraintViolationException exp = (ConstraintViolationException) e;
+            errMsgMap = exp.getConstraintViolations().stream()
+                    .collect(Collectors.toMap(ConstraintViolation::getPropertyPath, ConstraintViolation::getMessage));
 
         }else {
-            ConstraintViolationException exp = (ConstraintViolationException) e;
-            exp.getConstraintViolations().stream()
-                    .collect(Collectors.toMap(ConstraintViolation::getPropertyPath, ConstraintViolation::getMessage));
+            MethodArgumentTypeMismatchException exp = (MethodArgumentTypeMismatchException) e;
+            errMsgMap.put(exp.getName() + " 参数类型错误", "正确类型" + exp.getRequiredType().getSimpleName());
         }
 
         return GlobalResponse.fail(ErrorEnum.REQUEST_PARAM_ERR, errMsgMap);
