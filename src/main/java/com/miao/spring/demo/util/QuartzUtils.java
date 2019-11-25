@@ -40,7 +40,7 @@ public class QuartzUtils {
                 scheduler.resumeJob(jobKey);
             }
         }catch (Exception e){
-            throw new QuartzException.JobRunException(ErrorEnum.JOB_RUN_ERR.errCode(), ErrorEnum.JOB_RUN_ERR.errorMsg(), e);
+            throw new QuartzException(ErrorEnum.JOB_RUN_ERR, e);
         }
 
     }
@@ -57,7 +57,7 @@ public class QuartzUtils {
         try {
             scheduler.pauseJob(jobKey);
         } catch (SchedulerException e) {
-            throw new QuartzException.JobPauseException(ErrorEnum.JOB_PAUSE_ERR.errCode(), ErrorEnum.JOB_PAUSE_ERR.errorMsg(), e);
+            throw new QuartzException(ErrorEnum.JOB_PAUSE_ERR, e);
         }
     }
 
@@ -73,7 +73,7 @@ public class QuartzUtils {
         try {
             scheduler.triggerJob(jobKey);
         } catch (SchedulerException e) {
-            throw new QuartzException.JobRunOnceException(ErrorEnum.JOB_RUN_ONCE_ERR.errCode(), ErrorEnum.JOB_RUN_ONCE_ERR.errorMsg(), e);
+            throw new QuartzException(ErrorEnum.JOB_RUN_ONCE_ERR, e);
         }
     }
 
@@ -97,7 +97,7 @@ public class QuartzUtils {
             //重置对应的job
             scheduler.rescheduleJob(triggerKey, trigger);
         } catch (SchedulerException e) {
-            throw new QuartzException.JobUpdateException(ErrorEnum.JOB_UPDATE_ERR.errCode(), ErrorEnum.JOB_UPDATE_ERR.errorMsg(), e);
+            throw new QuartzException(ErrorEnum.JOB_UPDATE_ERR, e);
         }
     }
 
@@ -113,7 +113,7 @@ public class QuartzUtils {
         try {
             scheduler.deleteJob(jobKey);
         } catch (SchedulerException e) {
-            throw new QuartzException.JobDeleteException(ErrorEnum.JOB_DELETE_ERR.errCode(), ErrorEnum.JOB_DELETE_ERR.errorMsg(), e);
+            throw new QuartzException(ErrorEnum.JOB_DELETE_ERR, e);
         }
     }
 

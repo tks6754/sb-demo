@@ -6,12 +6,20 @@ package com.miao.spring.demo.common;
 
 public enum ErrorEnum {
 
+
+
     /*Quartz异常*/
     JOB_RUN_ERR("qtz5101","运行job任务错误"),
     JOB_PAUSE_ERR("qtz5103", "暂停job任务错误"),
     JOB_RUN_ONCE_ERR("qtz5105", "运行一次job任务错误"),
     JOB_UPDATE_ERR("qtz5106", "更新job任务错误"),
     JOB_DELETE_ERR("qtz5107", "删除job任务错误"),
+
+    /*请求参数异常*/
+    REQUEST_PARAM_ERR("rpe4001", "请求参数异常"),
+
+    /*内部服务异常*/
+    INNER_SERVER_ERR("ise5001", "系统服务异常"),
     ;
 
 

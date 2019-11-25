@@ -1,5 +1,6 @@
 package com.miao.spring.demo.common.exception;
 
+import com.miao.spring.demo.common.ErrorEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +17,13 @@ public class BaseException extends RuntimeException {
 
     /**
      * constructor
-     * @param errCode
-     * @param errorMsg
+     * @param errEnum
      * @param cause
      */
-    public BaseException(String errCode, String errorMsg, Throwable cause){
+    public BaseException(ErrorEnum errEnum, Throwable cause){
         super(cause);
-        this.errCode = errCode;
-        this.errorMsg = errorMsg;
+        this.errCode = errEnum.errCode();
+        this.errorMsg = errEnum.errorMsg();
     }
 
 }
