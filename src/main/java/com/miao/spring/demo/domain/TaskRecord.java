@@ -5,10 +5,9 @@ import org.apache.ibatis.type.Alias;
 
 import java.util.Date;
 
-
-@Alias("JobTask")
+@Alias("TaskRecord")
 @Data
-public class JobTask {
+public class TaskRecord {
     /**
      * 
      */
@@ -30,19 +29,24 @@ public class JobTask {
     private String jobClass;
 
     /**
-     * cron表达式
+     * 运行结果 1：成功 0：失败
      */
-    private String cronExpression;
+    private Integer taskResult;
 
     /**
-     * 任务状态 -1:删除 0:创建 1:运行 2:停止
+     * 运行信息
      */
-    private Integer jobStatus;
+    private String taskMessage;
 
     /**
-     * 任务描述
+     * 开始时间
      */
-    private String description;
+    private Date startTime;
+
+    /**
+     * 结束时间
+     */
+    private Date endTime;
 
     /**
      * 创建时间

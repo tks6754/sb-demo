@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miao.spring.demo.dao.TaskRecordMapper">
+  <resultMap id="BaseResultMap" type="com.miao.spring.demo.domain.TaskRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="job_group" jdbcType="VARCHAR" property="jobGroup" />
+    <result column="job_class" jdbcType="VARCHAR" property="jobClass" />
+    <result column="task_result" jdbcType="TINYINT" property="taskResult" />
+    <result column="task_message" jdbcType="VARCHAR" property="taskMessage" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+  </resultMap>
+  
+  <sql id="base_column_list">
+    id, job_name, job_group, job_class, task_result, task_message, gmt_create, gmt_modified, is_deleted
+  </sql>
+
+  <insert id="saveTaskRecord" parameterType="TaskRecord" >
+    INSERT INTO task_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobName!=null and jobName!=''">
+        job_name,
+      </if>
+      <if test="jobGroup!=null and jobGroup!=''">
+        job_group,
+      </if>
+      <if test="jobClass!=null and jobClass!=''">
+        job_class,
+      </if>
+      <if test="taskResult!=null">
+        task_result,
+      </if>
+      <if test="taskMessage!=null and taskMessage!=''">
+        task_message,
+      </if>
+      <if test="startTime!=null">
+        start_time,
+      </if>
+      <if test="endTime!=null">
+        end_time,
+      </if>
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobName!=null and jobName!=''">
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup!=null and jobName!=''">
+        #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="jobClass!=null and jobClass!=''">
+        #{jobClass,jdbcType=VARCHAR},
+      </if>
+      <if test="taskResult!=null">
+        #{taskResult,jdbcType=TINYINT},
+      </if>
+      <if test="taskMessage!=null and taskMessage!=''">
+        #{taskMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime!=null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime!=null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  
+</mapper>

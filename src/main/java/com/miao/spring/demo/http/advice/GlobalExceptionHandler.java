@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     public GlobalResponse baseExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         BaseException exception = (BaseException) e;
-        log.error("服务异常, 错误码:[{}], 错误信息:[{}]", exception.getErrCode(), exception.getErrCode(), e);
+        log.error("服务异常, 错误码:[{}], 错误信息:[{}]", exception.getErrCode(), exception.getErrorMsg(), e);
         return GlobalResponse.fail(exception.getErrCode(), exception.getErrorMsg());
     }
 

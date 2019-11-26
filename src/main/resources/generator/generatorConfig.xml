@@ -72,7 +72,12 @@
                enableUpdateByPrimaryKey="false"
                enableDeleteByPrimaryKey="false" />-->
 
-        <table tableName="job_task" domainObjectName="JobTask"
+        <!--<table tableName="job_task" domainObjectName="JobTask"
+               enableInsert="false"
+               enableSelectByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableDeleteByPrimaryKey="false" />-->
+        <table tableName="task_record" domainObjectName="TaskRecord"
                enableInsert="false"
                enableSelectByPrimaryKey="false"
                enableUpdateByPrimaryKey="false"

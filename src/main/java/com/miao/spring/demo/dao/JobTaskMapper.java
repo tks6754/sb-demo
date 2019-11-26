@@ -6,7 +6,6 @@ import com.miao.spring.demo.domain.qto.JobTaskQTO;
 import java.util.List;
 
 public interface JobTaskMapper {
-
     /**
      * 添加任务
      * @param jobTask
@@ -42,4 +41,18 @@ public interface JobTaskMapper {
      */
     JobTask getById(Long id);
 
+    /**
+     * 根据任务类 计数
+     * @param jobClass
+     * @return
+     */
+    long countByClass(String jobClass);
+
+    /**
+     * 根据任务name group 计数
+     * @param jobName
+     * @param jobGroup
+     * @return
+     */
+    long countByJobKey(String jobName, String jobGroup);
 }

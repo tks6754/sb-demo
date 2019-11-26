@@ -1,5 +1,8 @@
 package com.miao.spring.demo.service.impl;
 
+import com.miao.spring.demo.common.ErrorEnum;
+import com.miao.spring.demo.common.exception.DbException;
+import com.miao.spring.demo.common.exception.LogicalException;
 import com.miao.spring.demo.dao.JobTaskMapper;
 import com.miao.spring.demo.domain.JobTask;
 import com.miao.spring.demo.domain.dto.JobTaskDTO;
@@ -27,6 +30,11 @@ public class JobTaskServiceImpl implements JobTaskService {
 
     @Override
     public Long addJobTask(JobTaskDTO jobTaskDTO) {
+        if (jobTaskMapper.countByClass(jobTaskDTO.getJobClass())>0
+            || jobTaskMapper.countByJobKey(jobTaskDTO.getJobName(), jobTaskDTO.getJobGroup())>0){
+            throw new LogicalException("任务已存在，检查 jobName jobGroup jobClass");
+        }
+
         JobTask jobTask = new JobTask();
         BeanUtils.copyProperties(jobTaskDTO, jobTask);
         jobTask.setJobStatus(0);
@@ -37,7 +45,11 @@ public class JobTaskServiceImpl implements JobTaskService {
     @Override
     public boolean deleteJobTask(Long id) {
         JobTask jobTask = jobTaskMapper.getById(id);
+        if (jobTask==null){
+            throw new DbException.DbNotExistException();
+        }
         Integer num = jobTaskMapper.deleteJobTask(id);
+
         QuartzUtils.deleteScheduleJob(scheduler, jobTask.getJobName(), jobTask.getJobGroup());
 
         return num>0?true:false;
@@ -48,6 +60,10 @@ public class JobTaskServiceImpl implements JobTaskService {
         JobTask jobTask = new JobTask();
         BeanUtils.copyProperties(jobTaskDTO, jobTask);
         Integer num = jobTaskMapper.updateJobTask(jobTask);
+
+        if (num==0){
+            throw new DbException.DbNotExistException();
+        }
 
         JobTask job = jobTaskMapper.getById(jobTaskDTO.getId());
         QuartzUtils.updateScheduleJob(scheduler, job.getJobName(), job.getJobGroup(), job.getCronExpression());
@@ -71,10 +87,13 @@ public class JobTaskServiceImpl implements JobTaskService {
     }
 
     @Override
-    public boolean runTask(Long id) throws ClassNotFoundException, SchedulerException {
+    public boolean runTask(Long id) {
         JobTask jobTask = jobTaskMapper.getById(id);
-        QuartzUtils.runTask(scheduler,jobTask.getJobClass(), jobTask.getJobName(), jobTask.getJobGroup(), jobTask.getCronExpression());
+        if (jobTask==null){
+            throw new DbException.DbNotExistException();
+        }
 
+        QuartzUtils.runTask(scheduler,jobTask.getJobClass(), jobTask.getJobName(), jobTask.getJobGroup(), jobTask.getCronExpression());
         jobTask.setJobStatus(1);
         jobTaskMapper.updateJobTask(jobTask);
         return true;
@@ -83,6 +102,10 @@ public class JobTaskServiceImpl implements JobTaskService {
     @Override
     public boolean stopTask(Long id) {
         JobTask jobTask = jobTaskMapper.getById(id);
+        if (jobTask==null){
+            throw new DbException.DbNotExistException();
+        }
+
         QuartzUtils.pauseScheduleJob(scheduler, jobTask.getJobName(), jobTask.getJobGroup());
         jobTask.setJobStatus(2);
         jobTaskMapper.updateJobTask(jobTask);
@@ -92,6 +115,10 @@ public class JobTaskServiceImpl implements JobTaskService {
     @Override
     public boolean runTaskOnce(Long id) {
         JobTask jobTask = jobTaskMapper.getById(id);
+        if (jobTask==null){
+            throw new DbException.DbNotExistException();
+        }
+
         QuartzUtils.runOnce(scheduler, jobTask.getJobName(), jobTask.getJobGroup());
         return true;
     }
