@@ -31,7 +31,7 @@ CREATE TABLE `user`  (
 
 
 CREATE TABLE `job_task` (
-`id` bigint(11) NOT NULL AUTO_INCREMENT,
+`id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `job_name` varchar(64) DEFAULT NULL COMMENT '任务名',
 `job_group` varchar(64) DEFAULT NULL COMMENT '任务分组',
 `job_class` varchar(255) DEFAULT NULL COMMENT '任务执行时调用哪个类的方法 包名+类名',
@@ -46,7 +46,7 @@ PRIMARY KEY (`id`)
 
 
 CREATE TABLE `task_record` (
-`id` bigint(11) NOT NULL AUTO_INCREMENT,
+`id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `job_name` varchar(64) DEFAULT NULL COMMENT '任务名',
 `job_group` varchar(64) DEFAULT NULL COMMENT '任务分组',
 `job_class` varchar(255) DEFAULT NULL COMMENT '任务执行时调用哪个类的方法 包名+类名',
